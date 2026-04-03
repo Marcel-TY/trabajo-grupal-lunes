@@ -1,0 +1,91 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Reportes{% endblock %}
+
+{% block content %}
+<h1>📊 Reportes del Sistema</h1>
+
+<p style="color: var(--color-text-light); margin-bottom: var(--spacing-lg);">
+    Visualice estadísticas e informes del sistema de gestión docente.
+</p>
+
+<hr style="margin: var(--spacing-lg) 0; border: none; border-top: 2px solid var(--color-primary);">
+
+<h2>📉 Reporte 1: Ramos con Alumnos Reprobados</h2>
+<p style="color: var(--color-text-light); margin-bottom: var(--spacing-md);">Cantidad de estudiantes que no aprobaron cada ramo.</p>
+
+{% if reprobados %}
+    <div style="overflow-x: auto;">
+        <table role="region" aria-label="Tabla de ramos con reprobados">
+            <thead>
+                <tr>
+                    <th scope="col" style="text-align: left;">Ramo</th>
+                    <th scope="col" style="text-align: center;">Total de Reprobados</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in reprobados %}
+                <tr>
+                    <td>{{ item.ramo__descripcion }}</td>
+                    <td style="text-align: center; color: var(--color-danger); font-weight: bold;">{{ item.total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-success" role="status">
+        ✓ ¡Excelente! No hay alumnos reprobados en el sistema.
+    </div>
+{% endif %}
+
+<hr style="margin: var(--spacing-lg) 0; border: none; border-top: 2px solid var(--color-success);">
+
+<h2>📈 Reporte 2: Promedio de Notas por Docente y Ramo</h2>
+<p style="color: var(--color-text-light); margin-bottom: var(--spacing-md);">Promedio de calificaciones para cada docente por ramo impartido.</p>
+
+{% if promedios %}
+    <div style="overflow-x: auto;">
+        <table role="region" aria-label="Tabla de promedios por docente">
+            <thead>
+                <tr>
+                    <th scope="col">Docente</th>
+                    <th scope="col">Especialidad</th>
+                    <th scope="col">Ramo</th>
+                    <th scope="col" style="text-align: center;">Promedio de Notas</th>
+                    <th scope="col" style="text-align: center;">Cantidad de Alumnos</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for item in promedios %}
+            <tr>
+                <td><strong>{{ item.docente__nombre }}</strong></td>
+                <td>{{ item.docente__especialidad }}</td>
+                <td>{{ item.ramo__descripcion }}</td>
+                <td style="text-align: center;">
+                    <span style="background-color: var(--color-primary); color: white; padding: 0.25rem 0.75rem; border-radius: 3px; font-weight: bold;">
+                        {{ item.promedio|floatformat:2 }}
+                    </span>
+                </td>
+                <td style="text-align: center;">{{ item.cantidad_alumnos }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-warning" role="status">
+        ℹ️ Sin datos: Crea informes para generar reportes de promedios.
+    </div>
+{% endif %}
+
+<div class="alert alert-info" style="margin-top: var(--spacing-lg);">
+    <strong>📝 Información:</strong>
+    <ul style="margin-top: var(--spacing-sm); margin-left: 2rem;">
+        <li>Los reportes se actualizan automáticamente con los datos registrados.</li>
+        <li>Nota: Reprobado = calificación menor a 4.0 (puede variar según políticas del colegio)</li>
+        <li>Los promedios se calculan en tiempo real basados en todos los informes del sistema.</li>
+    </ul>
+</div>
+
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block content %}
+<div style="max-width: 400px; margin: var(--spacing-xl) auto;">
+    <h1 style="text-align: center;">🔐 Iniciar Sesión</h1>
+    
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">
+                <strong>⚠️ Error de autenticación:</strong>
+                <ul>
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        
+        {% for field in form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.errors %}
+                    <div class="errorlist" role="alert">
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% if field.help_text %}
+                    <small class="helptext">{{ field.help_text|safe }}</small>
+                {% endif %}
+            </div>
+        {% endfor %}
+        
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: var(--spacing-md); min-height: 48px;">
+            🔓 Iniciar Sesión
+        </button>
+    </form>
+    
+    <div style="text-align: center; margin-top: var(--spacing-lg);">
+        <p>¿No tienes cuenta? <a href="{% url 'registro' %}" style="color: var(--color-primary); font-weight: bold;">Regístrate aquí</a></p>
+        <p><a href="{% url 'portada' %}" style="color: var(--color-text-light);">Volver a la portada</a></p>
+    </div>
+</div>
+{% endblock %}

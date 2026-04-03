@@ -1,0 +1,82 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Lista de Informes{% endblock %}
+
+{% block content %}
+<h1>📋 Lista de Informes</h1>
+
+<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--spacing-md); margin-bottom: var(--spacing-md);">
+    <p style="color: var(--color-text-light);">
+        Total de informes: <strong>{{ page_obj.paginator.count }}</strong>
+    </p>
+    <a href="{% url 'informe_crear' %}" class="btn btn-success" title="Crear nuevo informe">
+        ➕ Crear Nuevo Informe
+    </a>
+</div>
+
+{% if page_obj %}
+    <div style="overflow-x: auto;">
+        <table role="grid">
+            <thead>
+                <tr>
+                    <th scope="col">#Folio</th>
+                    <th scope="col">Alumno</th>
+                    <th scope="col">Docente</th>
+                    <th scope="col">Ramo</th>
+                    <th scope="col" style="text-align: center;">Nota</th>
+                    <th scope="col" style="text-align: center;">Estado</th>
+                    <th scope="col" style="text-align: center;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for informe in page_obj %}
+                <tr>
+                    <td><strong>{{ informe.folio }}</strong></td>
+                    <td>{{ informe.nom_alu }}</td>
+                    <td>{{ informe.docente.nombre }}</td>
+                    <td>{{ informe.ramo.descripcion }}</td>
+                    <td style="text-align: center; font-weight: bold;">{{ informe.nota_final }}</td>
+                    <td style="text-align: center;">
+                        {% if informe.estado == 'AP' %}
+                            <span style="background-color: var(--color-success); color: white; padding: 0.25rem 0.75rem; border-radius: 3px;">✓ Aprobado</span>
+                        {% else %}
+                            <span style="background-color: var(--color-danger); color: white; padding: 0.25rem 0.75rem; border-radius: 3px;">✗ Reprobado</span>
+                        {% endif %}
+                    </td>
+                    <td class="acciones" style="text-align: center;">
+                        <a href="{% url 'informe_editar' informe.folio %}" class="btn btn-success btn-sm" title="Editar informe">✏️ Editar</a>
+                        <a href="{% url 'informe_eliminar' informe.folio %}" class="btn btn-danger btn-sm" title="Eliminar informe">🗑️ Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    {% if page_obj.paginator.num_pages > 1 %}
+    <div class="pagination" role="navigation" aria-label="Paginación">
+        {% if page_obj.has_previous %}
+            <a href="?page=1" title="Ir a la primera página">« Primera</a>
+            <a href="?page={{ page_obj.previous_page_number }}" title="Ir a la página anterior">‹ Anterior</a>
+        {% endif %}
+        
+        <span class="current" aria-current="page">
+            Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+        </span>
+        
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" title="Ir a la página siguiente">Siguiente ›</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" title="Ir a la última página">Última »</a>
+        {% endif %}
+    </div>
+    {% endif %}
+{% else %}
+    <div class="empty-state">
+        <div class="icon">📭</div>
+        <p style="font-size: var(--font-size-lg);">No hay informes registrados todavía.</p>
+        <a href="{% url 'informe_crear' %}" class="btn btn-primary">
+            ➕ Crear el Primer Informe
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

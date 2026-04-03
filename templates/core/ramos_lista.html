@@ -1,0 +1,68 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Lista de Ramos{% endblock %}
+
+{% block content %}
+<h1>📚 Lista de Ramos</h1>
+
+<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--spacing-md); margin-bottom: var(--spacing-md);">
+    <p style="color: var(--color-text-light);">
+        Total de ramos: <strong>{{ page_obj.paginator.count }}</strong>
+    </p>
+    <a href="{% url 'ramo_crear' %}" class="btn btn-success" title="Crear nuevo ramo">
+        ➕ Crear Nuevo Ramo
+    </a>
+</div>
+
+{% if page_obj %}
+    <div style="overflow-x: auto;">
+        <table role="grid">
+            <thead>
+                <tr>
+                    <th scope="col">#ID</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col" style="text-align: center;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ramo in page_obj %}
+                <tr>
+                    <td>{{ ramo.id_ramo }}</td>
+                    <td><strong>{{ ramo.descripcion }}</strong></td>
+                    <td class="acciones" style="text-align: center;">
+                        <a href="{% url 'ramo_editar' ramo.id_ramo %}" class="btn btn-success btn-sm" title="Editar ramo">✏️ Editar</a>
+                        <a href="{% url 'ramo_eliminar' ramo.id_ramo %}" class="btn btn-danger btn-sm" title="Eliminar ramo">🗑️ Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    {% if page_obj.paginator.num_pages > 1 %}
+    <div class="pagination" role="navigation" aria-label="Paginación">
+        {% if page_obj.has_previous %}
+            <a href="?page=1" title="Ir a la primera página">« Primera</a>
+            <a href="?page={{ page_obj.previous_page_number }}" title="Ir a la página anterior">‹ Anterior</a>
+        {% endif %}
+        
+        <span class="current" aria-current="page">
+            Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+        </span>
+        
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" title="Ir a la página siguiente">Siguiente ›</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" title="Ir a la última página">Última »</a>
+        {% endif %}
+    </div>
+    {% endif %}
+{% else %}
+    <div class="empty-state">
+        <div class="icon">📭</div>
+        <p style="font-size: var(--font-size-lg);">No hay ramos registrados todavía.</p>
+        <a href="{% url 'ramo_crear' %}" class="btn btn-primary">
+            ➕ Crear el Primer Ramo
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

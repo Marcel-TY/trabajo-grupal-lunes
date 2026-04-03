@@ -1,0 +1,70 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Lista de Docentes{% endblock %}
+
+{% block content %}
+<h1>👨‍🏫 Lista de Docentes</h1>
+
+<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--spacing-md); margin-bottom: var(--spacing-md);">
+    <p style="color: var(--color-text-light);">
+        Total de docentes: <strong>{{ page_obj.paginator.count }}</strong>
+    </p>
+    <a href="{% url 'docente_crear' %}" class="btn btn-success" title="Crear nuevo docente">
+        ➕ Crear Nuevo Docente
+    </a>
+</div>
+
+{% if page_obj %}
+    <div style="overflow-x: auto;">
+        <table role="grid">
+            <thead>
+                <tr>
+                    <th scope="col">#ID</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Especialidad</th>
+                    <th scope="col" style="text-align: center;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for docente in page_obj %}
+                <tr>
+                    <td>{{ docente.cod_doc }}</td>
+                    <td><strong>{{ docente.nombre }}</strong></td>
+                    <td>{{ docente.especialidad }}</td>
+                    <td class="acciones" style="text-align: center;">
+                        <a href="{% url 'docente_editar' docente.cod_doc %}" class="btn btn-success btn-sm" title="Editar docente">✏️ Editar</a>
+                        <a href="{% url 'docente_eliminar' docente.cod_doc %}" class="btn btn-danger btn-sm" title="Eliminar docente">🗑️ Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    {% if page_obj.paginator.num_pages > 1 %}
+    <div class="pagination" role="navigation" aria-label="Paginación">
+        {% if page_obj.has_previous %}
+            <a href="?page=1" title="Ir a la primera página">« Primera</a>
+            <a href="?page={{ page_obj.previous_page_number }}" title="Ir a la página anterior">‹ Anterior</a>
+        {% endif %}
+        
+        <span class="current" aria-current="page">
+            Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+        </span>
+        
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" title="Ir a la página siguiente">Siguiente ›</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" title="Ir a la última página">Última »</a>
+        {% endif %}
+    </div>
+    {% endif %}
+{% else %}
+    <div class="empty-state">
+        <div class="icon">📭</div>
+        <p style="font-size: var(--font-size-lg);">No hay docentes registrados todavía.</p>
+        <a href="{% url 'docente_crear' %}" class="btn btn-primary">
+            ➕ Crear el Primer Docente
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Confirmar Eliminación - Informe{% endblock %}
+
+{% block content %}
+<h1>⚠️ Confirmar Eliminación</h1>
+
+<div class="confirm-delete">
+    <h2>¿Deseas eliminar este informe?</h2>
+    <p>Estás a punto de eliminar permanentemente el informe del alumno:</p>
+    <div style="background-color: var(--color-white); padding: var(--spacing-md); border-radius: var(--border-radius); margin: var(--spacing-md) 0; border: 2px solid var(--color-warning);">
+        <p style="font-size: var(--font-size-lg); margin: 0;"><strong>{{ object.nom_alu }}</strong></p>
+        <p style="color: var(--color-text-light); margin: var(--spacing-xs) 0 0 0;">Ramo: {{ object.ramo.descripcion }}</p>
+        <p style="color: var(--color-text-light); margin: var(--spacing-xs) 0 0 0;">Docente: {{ object.docente.nombre }}</p>
+    </div>
+    
+    <p class="warning-text">
+        ⚠️ Esta acción no se puede deshacer. Se eliminará toda la información asociada.
+    </p>
+    
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estás completamente seguro? Esta acción es irreversible.')">
+            🗑️ Sí, Eliminar Definitivamente
+        </button>
+        <a href="{% url 'informes_lista' %}" class="btn btn-outline">
+            ❌ No, Cancelar
+        </a>
+    </form>
+</div>
+
+<div class="alert alert-warning" style="margin-top: var(--spacing-lg);">
+    <strong>📝 Nota:</strong> Por favor, verifica que deseas eliminar este registro. Los datos no podrán ser recuperados.
+</div>
+{% endblock %}

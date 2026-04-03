@@ -1,0 +1,47 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<h1>{{ titulo }}</h1>
+
+<form method="post" novalidate>
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+            <strong>⚠️ Error en el formulario:</strong>
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+    
+    {% for field in form %}
+        <div class="form-group">
+            {{ field.label_tag }}
+            {% if field.help_text %}
+                <small class="helptext">{{ field.help_text|safe }}</small>
+            {% endif %}
+            {{ field }}
+            {% if field.errors %}
+                <div class="errorlist" role="alert">
+                    {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+    
+    <div class="action-buttons">
+        <button type="submit" class="btn btn-success" title="Guardar cambios">
+            💾 Guardar
+        </button>
+        <a href="{% url 'informes_lista' %}" class="btn btn-outline" title="Cancelar y volver">
+            ❌ Cancelar
+        </a>
+    </div>
+</form>
+
+<div class="alert alert-info" style="margin-top: var(--spacing-lg);">
+    <strong>💡 Consejo:</strong> Completa todos los campos requeridos con cuidado. Puedes cancelar en cualquier momento.
+</div>
+{% endblock %}

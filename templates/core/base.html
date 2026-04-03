@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema de Gestión Docente para colegio">
+    <title>{% block title %}Sistema de Gestión Docente - Colegio{% endblock %}</title>
+    <style>
+        /* ===== RESET Y VARIABLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --color-primary: #2563eb;
+            --color-primary-hover: #1d4ed8;
+            --color-success: #10b981;
+            --color-success-hover: #059669;
+            --color-danger: #ef4444;
+            --color-danger-hover: #dc2626;
+            --color-warning: #f59e0b;
+            --color-text: #1f2937;
+            --color-text-light: #6b7280;
+            --color-bg: #f9fafb;
+            --color-bg-light: #f3f4f6;
+            --color-border: #e5e7eb;
+            --color-white: #ffffff;
+            --transition: all 0.3s ease;
+            --font-size-base: 16px;
+            --font-size-sm: 14px;
+            --font-size-lg: 18px;
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 3rem;
+            --border-radius: 8px;
+            --box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --box-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* ===== TIPOGRAFÍA Y COLORES BASE ===== */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            font-size: var(--font-size-base);
+            min-height: 100vh;
+        }
+        
+        /* ===== LEY 1: FITTS - BOTONES GRANDES Y ACCESIBLES ===== */
+        /* ===== LEY 3: JAKOB - ESTÁNDARES WEB ===== */
+        /* Navegación: patrón standard, fácil de clickear */
+        nav {
+            background-color: var(--color-primary);
+            padding: var(--spacing-sm);
+            position: sticky;
+            top: 0;
+            box-shadow: var(--box-shadow-md);
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+        }
+        
+        nav .logo {
+            font-size: var(--font-size-lg);
+            font-weight: bold;
+            color: var(--color-white);
+            text-decoration: none;
+        }
+        
+        nav .nav-links {
+            display: flex;
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        nav a {
+            color: var(--color-white);
+            text-decoration: none;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            font-size: var(--font-size-sm);
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
+        
+        nav a:hover, nav a:focus {
+            background-color: var(--color-primary-hover);
+            outline: none;
+        }
+        
+        nav .user-info {
+            color: var(--color-white);
+            font-size: var(--font-size-sm);
+            margin-left: auto;
+        }
+        
+        /* ===== LEY 4: VISIBILIDAD DEL ESTADO ===== */
+        .breadcrumb {
+            padding: var(--spacing-md) 0;
+            margin-bottom: var(--spacing-md);
+            color: var(--color-text-light);
+            font-size: var(--font-size-sm);
+        }
+        
+        .breadcrumb a {
+            color: var(--color-primary);
+            text-decoration: none;
+            margin: 0 var(--spacing-xs);
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        /* ===== CONTENEDOR PRINCIPAL ===== */
+        .container {
+            max-width: 1200px;
+            margin: var(--spacing-lg) auto;
+            padding: var(--spacing-lg);
+            background-color: var(--color-white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow-md);
+        }
+        
+        /* ===== TIPOGRAFÍA ===== */
+        h1, h2, h3, h4 {
+            color: #F5276C;
+            margin-bottom: var(--spacing-md);
+            font-weight: 600;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            border-bottom: 3px solid var(--color-primary);
+            padding-bottom: var(--spacing-sm);
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            margin-top: var(--spacing-lg);
+        }
+        
+        p {
+            margin-bottom: var(--spacing-sm);
+            color: var(--color-text);
+        }
+        
+        /* ===== TABLAS ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--spacing-md) 0;
+            font-size: var(--font-size-sm);
+        }
+        
+        table th {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            padding: var(--spacing-sm);
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 60px;
+        }
+        
+        table td {
+            padding: var(--spacing-sm);
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        table tr {
+            transition: var(--transition);
+        }
+        
+        table tbody tr:hover {
+            background-color: var(--color-bg-light);
+        }
+        
+        table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        /* ===== LEY 2: FITTS + LEY 2: HICK - BOTONES OPTIMIZADOS ===== */
+        button, a.btn, .btn {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            padding: var(--spacing-xs) var(--spacing-md);
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-xs);
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-size: var(--font-size-base);
+            transition: var(--transition);
+            font-weight: 500;
+            min-height: 44px;
+            white-space: nowrap;
+        }
+        
+        button:hover, a.btn:hover, .btn:hover {
+            background-color: var(--color-primary-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow-md);
+        }
+        
+        button:focus, a.btn:focus, .btn:focus {
+            outline: 2px solid var(--color-primary);
+            outline-offset: 2px;
+        }
+        
+        button:active, a.btn:active, .btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Variantes de botones */
+        .btn-primary {
+            background-color: var(--color-primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--color-primary-hover);
+        }
+        
+        .btn-success {
+            background-color: var(--color-success);
+        }
+        
+        .btn-success:hover {
+            background-color: var(--color-success-hover);
+        }
+        
+        .btn-danger {
+            background-color: var(--color-danger);
+        }
+        
+        .btn-danger:hover {
+            background-color: var(--color-danger-hover);
+        }
+        
+        .btn-warning {
+            background-color: var(--color-warning);
+            color: #000;
+        }
+        
+        .btn-warning:hover {
+            background-color: #d97706;
+        }
+        
+        .btn-sm {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            font-size: var(--font-size-sm);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--color-primary);
+            color: var(--color-primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+        }
+        
+        /* ===== LEY 5: PAGINACIÓN ===== */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-xs);
+            margin: var(--spacing-lg) 0;
+            flex-wrap: wrap;
+        }
+        
+        .pagination a, .pagination span {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border: 2px solid var(--color-primary);
+            border-radius: var(--border-radius);
+            color: var(--color-primary);
+            text-decoration: none;
+            transition: var(--transition);
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-sm);
+        }
+        
+        .pagination a:hover {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+        
+        .pagination .current {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            border-color: var(--color-primary);
+            font-weight: 600;
+        }
+        
+        /* ===== LEY 6: RETROALIMENTACIÓN INMEDIATA ===== */
+        /* ===== LEY 11: MENSAJES DE ERROR Y NOTIFICACIONES ===== */
+        .messages {
+            list-style: none;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .messages li {
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius);
+            margin-bottom: var(--spacing-sm);
+            border-left: 4px solid;
+            animation: slideIn 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .messages .success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border-left-color: var(--color-success);
+        }
+        
+        .messages .error {
+            background-color: #fee2e2;
+            color: #7f1d1d;
+            border-left-color: var(--color-danger);
+        }
+        
+        .messages .warning {
+            background-color: #fef3c7;
+            color: #78350f;
+            border-left-color: var(--color-warning);
+        }
+        
+        .messages .info {
+            background-color: #dbeafe;
+            color: #0c2340;
+            border-left-color: var(--color-primary);
+        }
+        
+        /* ===== LEY 8: PREVENCIÓN DE ERRORES ===== */
+        .confirm-delete {
+            background-color: var(--color-bg-light);
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius);
+            text-align: center;
+            border: 2px solid var(--color-warning);
+        }
+        
+        .confirm-delete h2 {
+            color: var(--color-danger);
+        }
+        
+        .confirm-delete p {
+            font-size: var(--font-size-lg);
+            margin-bottom: var(--spacing-md);
+            color: var(--color-text);
+        }
+        
+        .confirm-delete .warning-text {
+            color: var(--color-danger);
+            font-size: var(--font-size-sm);
+            margin-bottom: var(--spacing-md);
+            font-weight: 600;
+        }
+        
+        .confirm-delete form {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .confirm-delete button {
+            min-width: 150px;
+        }
+        
+        /* ===== FORMULARIOS ===== */
+        form {
+            background-color: var(--color-bg-light);
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius);
+            margin: var(--spacing-md) 0;
+        }
+        
+        form .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+        
+        form label {
+            display: block;
+            margin-bottom: var(--spacing-xs);
+            font-weight: 600;
+            color: var(--color-text);
+            font-size: var(--font-size-sm);
+        }
+        
+        form label .required {
+            color: var(--color-danger);
+        }
+        
+        form input, form select, form textarea {
+            width: 100%;
+            padding: var(--spacing-sm);
+            border: 2px solid var(--color-border);
+            border-radius: var(--border-radius);
+            font-size: var(--font-size-base);
+            font-family: inherit;
+            transition: var(--transition);
+            background-color: var(--color-white);
+        }
+        
+        form input:focus, form select:focus, form textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        form textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        form .helptext {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-light);
+            margin-top: var(--spacing-xs);
+            display: block;
+        }
+        
+        .errorlist {
+            list-style: none;
+            color: var(--color-danger);
+            font-size: var(--font-size-sm);
+            margin-top: var(--spacing-xs);
+            padding: var(--spacing-sm);
+            background-color: #fee2e2;
+            border-radius: var(--border-radius);
+        }
+        
+        .errorlist li {
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        /* ===== LEY 7: CONSISTENCIA ===== */
+        .action-buttons {
+            display: flex;
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
+            margin-top: var(--spacing-lg);
+        }
+        
+        .action-buttons button {
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .acciones {
+            white-space: nowrap;
+            display: flex;
+            gap: var(--spacing-xs);
+        }
+        
+        .acciones a {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            font-size: var(--font-size-sm);
+        }
+        
+        /* ===== ALERTAS E INFORMACIÓN ===== */
+        .alert {
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius);
+            margin-bottom: var(--spacing-md);
+            border-left: 4px solid;
+        }
+        
+        .alert-info {
+            background-color: #dbeafe;
+            color: #0c2340;
+            border-left-color: var(--color-primary);
+        }
+        
+        .alert-success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border-left-color: var(--color-success);
+        }
+        
+        .alert-warning {
+            background-color: #fef3c7;
+            color: #78350f;
+            border-left-color: var(--color-warning);
+        }
+        
+        .alert-danger {
+            background-color: #fee2e2;
+            color: #7f1d1d;
+            border-left-color: var(--color-danger);
+        }
+        
+        /* ===== EMPTY STATE / CUERPO VACÍO ===== */
+        .empty-state {
+            text-align: center;
+            padding: var(--spacing-xl);
+            color: var(--color-text-light);
+        }
+        
+        .empty-state .icon {
+            font-size: 3rem;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .empty-state p {
+            margin-bottom: var(--spacing-md);
+        }
+        
+        /* ===== RESPONSIVIDAD ===== */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            nav .nav-links {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .container {
+                margin: var(--spacing-md) var(--spacing-sm);
+                padding: var(--spacing-md);
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            table {
+                font-size: var(--font-size-sm);
+            }
+            
+            table th, table td {
+                padding: var(--spacing-xs);
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            button, a.btn, .btn {
+                width: 100%;
+            }
+        }
+        
+        /* ===== ACCESIBILIDAD ===== */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #1f2937;
+                color: #f3f4f6;
+            }
+            
+            .container {
+                background-color: #111827;
+                color: #f3f4f6;
+            }
+            
+            form {
+                background-color: #111827;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="{% url 'portada' %}" class="logo">🏫 Sistema Docente</a>
+        <div class="nav-links">
+            <a href="{% url 'portada' %}" title="Ir a la portada">🏠 Portada</a>
+            <a href="{% url 'docentes_lista' %}" title="Gestionar docentes">👨‍🏫 Docentes</a>
+            <a href="{% url 'ramos_lista' %}" title="Gestionar ramos">📚 Ramos</a>
+            <a href="{% url 'informes_lista' %}" title="Gestionar informes">📋 Informes</a>
+            <a href="{% url 'reportes' %}" title="Ver reportes">📊 Reportes</a>
+        </div>
+        {% if user.is_authenticated %}
+            <div class="user-info">👤 {{ user.username }}</div>
+            <a href="{% url 'logout' %}" title="Cerrar sesión">🚪 Salir</a>
+        {% else %}
+            <a href="{% url 'login' %}" title="Iniciar sesión">🔓 Entrar</a>
+            <a href="{% url 'registro' %}" title="Crear cuenta nueva">✍️ Registro</a>
+        {% endif %}
+    </nav>
+    
+    <div class="container">
+        {% if messages %}
+            <ul class="messages" role="region" aria-live="polite" aria-atomic="true">
+                {% for message in messages %}
+                    <li class="{% if message.tags %}{{ message.tags }}{% endif %}">
+                        {% if message.tags == 'success' %}✓{% elif message.tags == 'error' %}✕{% elif message.tags == 'warning' %}⚠{% else %}ℹ{% endif %}
+                        {{ message }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
