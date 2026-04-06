@@ -14,8 +14,8 @@ CREATE TABLE INFORME (
     cod_doc INT,
     cod_ramo INT,
     nom_alu VARCHAR(100),
-    nota_final DECIMAL(3,1),
-    estado VARCHAR(20),
+    nota_final DECIMAL(4,1),
+    estado VARCHAR(2),
     FOREIGN KEY (cod_doc) REFERENCES DOCENTE(cod_doc),
     FOREIGN KEY (cod_ramo) REFERENCES RAMO(id_ramo)
 );
@@ -35,8 +35,8 @@ INSERT INTO RAMO VALUES
 (105, 'Inglés Básico');
 
 INSERT INTO INFORME VALUES
-(1001, 1, 101, 'Luis Torres', 6.5, 'Aprobado'),
-(1002, 2, 102, 'Camila Vega', 5.8, 'Aprobado'),
-(1003, 3, 103, 'Diego Muñoz', 4.2, 'Reprobado'),
-(1004, 4, 104, 'Sofía Herrera', 6.9, 'Aprobado'),
-(1005, 5, 105, 'Martín López', 3.9, 'Reprobado');
+(1001, 1, 101, 'Luis Torres',    6.5, 'AP'),
+(1002, 2, 102, 'Camila Vega',    5.8, 'AP'),
+(1003, 3, 103, 'Diego Muñoz',    4.2, 'RP'),
+(1004, 4, 104, 'Sofía Herrera',  6.9, 'AP'),
+(1005, 5, 105, 'Martín López',   3.9, 'RP');

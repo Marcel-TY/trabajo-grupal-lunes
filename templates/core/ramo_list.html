@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Ramos{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="fw-bold">📚 Ramos</h2>
+  <a href="{% url 'ramo_create' %}" class="btn btn-success">+ Nuevo Ramo</a>
+</div>
+
+<div class="card shadow-sm">
+  <div class="card-body p-0">
+    <table class="table table-striped table-hover mb-0">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Descripción</th>
+          <th class="text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in ramos %}
+        <tr>
+          <td>{{ r.id_ramo }}</td>
+          <td>{{ r.descripcion }}</td>
+          <td class="text-center">
+            <a href="{% url 'ramo_update' r.pk %}" class="btn btn-sm btn-warning me-1">✏️ Editar</a>
+            <a href="{% url 'ramo_delete' r.pk %}" class="btn btn-sm btn-danger">🗑️ Eliminar</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="3" class="text-center text-muted py-4">No hay ramos registrados.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
