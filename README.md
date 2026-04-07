@@ -8,10 +8,10 @@ Proyecto Django para gestionar información docente: profesores, ramos e informe
 | Tarea | Descripción | Estado |
 |-------|-------------|--------|
 | ✅ 1. Instalación y configuración | Django instalado, proyecto creado, modelos y BD | **LISTO** |
-| 🔲 2. Portada / HTML base | Template de presentación y menú de navegación | Pendiente |
-| 🔲 3. Módulo de usuarios | Registro, login y logout | Pendiente |
-| 🔲 4. CRUD | Formularios para Docente, Ramo e Informe | Pendiente |
-| 🔲 5. Reportes | Listar reprobados, promedio por docente | Pendiente |
+| 🔲 2. Portada / HTML base | Template de presentación y menú de navegación | **LISTO** |
+| 🔲 3. Módulo de usuarios | Registro, login y logout | **LISTO** |
+| 🔲 4. CRUD | Formularios para Docente, Ramo e Informe | **LISTO** |
+| 🔲 5. Reportes | Listar reprobados, promedio por docente | **LISTO** |
 
 ---
 
@@ -74,7 +74,7 @@ Admin: http://127.0.0.1:8000/admin (usuario: admin)
 
 ---
 
-## 🔲 Parte 2 — Portada y Templates HTML (pendiente)
+## 🔲 Parte 2 — Portada y Templates HTML (**LISTO**)
 
 ### Qué hacer
 1. Crear `templates/core/base.html` con menú de navegación
@@ -112,7 +112,7 @@ urlpatterns = [
 
 ---
 
-## 🔲 Parte 3 — Módulo de Usuarios (pendiente)
+## 🔲 Parte 3 — Módulo de Usuarios (**LISTO**)
 
 ### Qué hacer
 Usar el sistema de autenticación incluido en Django.
@@ -151,7 +151,7 @@ def registro(request):
 
 ---
 
-## 🔲 Parte 4 — CRUD (pendiente)
+## 🔲 Parte 4 — CRUD (**LISTO**)
 
 ### Qué hacer
 Crear vistas para listar, crear, editar y eliminar para cada entidad.
@@ -203,7 +203,7 @@ class InformeForm(forms.ModelForm):
 
 ---
 
-## 🔲 Parte 5 — Reportes (pendiente)
+## 🔲 Parte 5 — Reportes (**LISTO**)
 
 ### Reporte 1: Ramos con cantidad de reprobados
 ```python
